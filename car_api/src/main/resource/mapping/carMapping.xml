@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<!-- mapper:根标签，namespace：命名空间，随便写，一般保证命名空间唯一 -->
+<mapper namespace="com.fh.dao.CarDao">
+
+    <insert id="addCar" parameterType="com.fh.entity.QueryCar">
+           insert into fh_person(uName,carId,buyDate,isAllIn,imgUrl) values (#{uName},#{carId},#{buyDate},#{isAllIn},#{imgUrl})
+      </insert>
+
+    <select id="queryCarCount" parameterType="com.fh.entity.QueryCar" resultType="java.lang.Long">
+         select count(*) from fh_person where 1=1
+        <if test="startDate!=null">
+            <![CDATA[ and buyDate >= #{startDate} ]]>
+        </if>
+        <if test="endDate!=null">
+            <![CDATA[ and buyDate <= #{endDate} ]]>
+        </if>
+        <if test="uName !=null and uName !='' ">
+            and uName like  concat('%',#{uName},'%')
+        </if>
+        <if test="carId !=null and carId !='' and carId>0">
+            and carId=#{carId}
+        </if>
+    </select>
+
+    <select id="queryCarList" parameterType="com.fh.entity.QueryCar" resultType="com.fh.entity.Car">
+          select * from fh_person  where 1=1
+        <if test="startDate!=null">
+            <![CDATA[ and buyDate >= #{startDate} ]]>
+        </if>
+        <if test="endDate!=null">
+            <![CDATA[ and buyDate <= #{endDate} ]]>
+        </if>
+        <if test="uName !=null and uName !='' ">
+            and uName like  concat('%',#{uName},'%')
+        </if>
+        <if test="carId !=null and carId !='' and carId>0">
+            and carId=#{carId}
+        </if>
+        limit #{start},#{length}
+    </select>
+
+</mapper>
